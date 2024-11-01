@@ -14,5 +14,7 @@ namespace UTS_72220538.Models
         public int Duration { get; set; }
         public string Description { get; set; }
         public Category Category { get; set; } // Properti objek Category
+
+        public bool IsSelected { get; set; }
     }
 }

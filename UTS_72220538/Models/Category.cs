@@ -11,5 +11,11 @@ namespace UTS_72220538.Models
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+
+    }
+
+    public class CategoryWithSelection : Category
+    {
+        public bool IsSelected { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace UTS_72220538
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new MainPage();
         }
     }
 }

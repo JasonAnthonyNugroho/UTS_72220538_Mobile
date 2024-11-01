@@ -1,103 +1,58 @@
 using UTS_72220538.Models; // Pastikan Anda memiliki model Category
 using UTS_72220538.Services; // Pastikan Anda memiliki CategoryService
 using System;
-using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Microsoft.Maui.Controls;
 
 namespace UTS_72220538.Page
 {
     public partial class CategoryPage : ContentPage
     {
         private readonly CategoryService _categoryService;
-        private ObservableCollection<CategoryViewModel> _categories;
+        private ObservableCollection<CategoryWithSelection> _categories;
+
         public CategoryPage(CategoryService categoryService)
         {
             InitializeComponent();
             _categoryService = categoryService;
-            _categories = new ObservableCollection<CategoryViewModel>();
+            _categories = new ObservableCollection<CategoryWithSelection>();
             CategoriesListView.ItemsSource = _categories;
+
             LoadCategories(); // Load categories when page is initialized
         }
-
-        private async void OnAddCategory(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new AddCategory(new CategoryService(new HttpClient())));
-        }
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await LoadCategories();
-        }
-        private async Task LoadCategories()
+        private async void LoadCategories()
         {
             try
             {
-                var categories = await _categoryService.GetAllCategoriesAsync();
-                CategoriesListView.ItemsSource = categories.ToList(); // Pastikan ini tidak null
+                var categories = await _categoryService.GetAllCategoriesAsync(); // Assuming this method exists
+                _categories.Clear(); // Clear existing categories
+                foreach (var category in categories)
+                {
+                    // Wrap category in your CategoryWithSelection model
+                    _categories.Add(new CategoryWithSelection { CategoryId = category.CategoryId, Name = category.Name, Description = category.Description });
+                }
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Failed to load categories: {ex.Message}", "OK");
             }
         }
+        private async void OnUpdateSelectedCategory(object sender, EventArgs e)
+        {
+            var selectedCategory = CategoriesListView.SelectedItem as CategoryWithSelection;
 
-        private void OnCategorySelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (e.SelectedItem is Category selectedCategory)
+            if (selectedCategory != null)
             {
-                DisplayAlert("Selected Category", selectedCategory.Name, "OK");
-                CategoriesListView.SelectedItem = null; // Menghapus pilihan
-            }
-        }
-        private async void OnRefreshList(object sender, EventArgs e)
-        {
-            LoadCategories();
-        }
-        private async void OnDeleteCategory(object sender, EventArgs e)
-        {
-            var selectedCategories = _categories.Where(c => c.IsSelected).ToList();
-
-            if (selectedCategories.Count > 0)
-            {
-                bool confirm = await DisplayAlert("Confirm Delete",
-                    "Are you sure you want to delete the selected categories?",
-                    "Yes",
-                    "No");
-                if (confirm)
-                {
-                    try
-                    {
-                        foreach (var categoryViewModel in selectedCategories)
-                        {
-                            await _categoryService.DeleteCategoryAsync(categoryViewModel.Category.CategoryId);
-                            _categories.Remove(categoryViewModel);
-                        }
-                        await DisplayAlert("Success", "Selected categories deleted successfully!", "OK");
-                    }
-                    catch (Exception ex)
-                    {
-                        await DisplayAlert("Error", $"Failed to delete categories: {ex.Message}", "OK");
-                    }
-                }
-            }
-            else
-            {
-                await DisplayAlert("Warning", "Please select at least one category to delete.", "OK");
-            }
-        }
-
-        private async void OnUpdateCategory(object sender, EventArgs e)
-        {
-            if (CategoriesListView.SelectedItem is Category selectedCategory)
-            {
-                // Navigate to EditCategory page, passing the selected category
-                //await Navigation.PushAsync(new EditCategory(_categoryService, selectedCategory));
+                // Navigate to EditCategory page, passing the selected category and categoryService
+                await Navigation.PushAsync(new EditCategory(selectedCategory, _categoryService));
             }
             else
             {
                 await DisplayAlert("Error", "Please select a category to update.", "OK");
             }
         }
-        
+
+        // Other methods...
     }
 }

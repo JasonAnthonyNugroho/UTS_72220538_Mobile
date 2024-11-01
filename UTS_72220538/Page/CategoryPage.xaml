@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTS_72220538.Page.CategoryPage"
-             Title="CategoryPage">
+             Title="Categories">
     <StackLayout>
-        <ListView x:Name="CategoriesListView" ItemSelected="OnCategorySelected">
+        <ListView x:Name="CategoriesListView" 
+                  SelectionMode="Single"
+                  ItemSelected="OnCategorySelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="5">
+                        <StackLayout Orientation="Horizontal" Padding="10">
                             <CheckBox IsChecked="{Binding IsSelected}" />
                             <Label Text="{Binding Name}" VerticalOptions="Center" />
-                            
+                            <Label Text="{Binding Description}" VerticalOptions="Center" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Text="Add Category" Clicked="OnAddCategory" />
+        <Button x:Name="AddCategoryButton" Text="Add Category" Clicked="OnAddCategory" />
         <Button x:Name="RefreshListButton" Text="Refresh List" Clicked="OnRefreshList" />
-        <Button x:Name="DeleteCategoryButton" Text="Delete Selected Category" Clicked="OnDeleteCategory" />
-        <Button x:Name="UpdateCategoryButton" Text="Update Selected Category" Clicked="OnUpdateCategory" />
-        
+        <Button x:Name="DeleteSelectedCategoriesButton" Text="Delete Selected Categories" Clicked="OnDeleteSelectedCategories" />
+        <Button x:Name="UpdateSelectedCategoryButton" Text="Update Selected Category" Clicked="OnUpdateSelectedCategory" />
     </StackLayout>
 </ContentPage>

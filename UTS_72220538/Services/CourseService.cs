@@ -55,5 +55,10 @@ namespace UTS_72220538.Services
             var response = await _httpClient.DeleteAsync($"api/courses/{id}");
             response.EnsureSuccessStatusCode();
         }
+        public async Task<bool> AddCourseAsync(Course course)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/courses", course);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

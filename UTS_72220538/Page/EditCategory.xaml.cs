@@ -1,9 +1,24 @@
-namespace UTS_72220538.Page;
+using Microsoft.Maui.Controls;
+using UTS_72220538.Models;
+using UTS_72220538.Services;
 
-public partial class EditCategory : ContentPage
+namespace UTS_72220538.Page
 {
-	public EditCategory()
-	{
-		InitializeComponent();
-	}
+    public partial class EditCategory : ContentPage
+    {
+        private readonly CategoryService _categoryService;
+        private CategoryWithSelection _category;
+
+        public EditCategory(CategoryWithSelection category, CategoryService categoryService)
+        {
+            InitializeComponent();
+            _categoryService = categoryService;
+            _category = category;
+
+            // Initialize fields with data from _category
+            CategoryNameEntry.Text = _category.Name;
+            CategoryDescriptionEditor.Text = _category.Description;
+        }
+        // Your methods for editing a category will go here
+    }
 }

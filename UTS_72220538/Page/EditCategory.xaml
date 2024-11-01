@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UTS_72220538.Page.EditCategory"
-             Title="EditCategory">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Edit Category">
+    <StackLayout Padding="20">
+        <Label Text="Category Name" />
+        <Entry x:Name="CategoryNameEntry" Text="{Binding Name}" />
+
+        <Label Text="Description" />
+        <Editor x:Name="CategoryDescriptionEditor" Text="{Binding Description}" />
+
+        <Button Text="Save" Clicked="OnSaveClicked" />
+    </StackLayout>
 </ContentPage>
