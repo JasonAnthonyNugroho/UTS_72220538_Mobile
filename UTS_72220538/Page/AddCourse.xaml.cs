@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using UTS_72220538.Models;
-using UTS_72220538.Services; // Ensure you have your models defined here
+using UTS_72220538.Services;
 
 namespace UTS_72220538.Page
 {
@@ -19,7 +19,7 @@ namespace UTS_72220538.Page
         {
             InitializeComponent();
             _courseService = new CourseService(new HttpClient());
-            _categoryService = new CategoryService(new HttpClient()); // Ensure you have this service
+            _categoryService = new CategoryService(new HttpClient());
             LoadCategories(); // Load categories when the page is initialized
         }
 
@@ -28,10 +28,8 @@ namespace UTS_72220538.Page
             try
             {
                 _categories = (await _categoryService.GetAllCategoriesAsync()).ToList();
-
-
                 CourseCategoryPicker.ItemsSource = _categories;
-                CourseCategoryPicker.ItemDisplayBinding = new Binding("Name"); // Display the category name
+                CourseCategoryPicker.ItemDisplayBinding = new Binding("Name");
             }
             catch (Exception ex)
             {
@@ -60,7 +58,6 @@ namespace UTS_72220538.Page
                 if (result)
                 {
                     await DisplayAlert("Success", "Course added successfully!", "OK");
-                    // Optionally navigate back or clear fields
                     await Navigation.PopAsync();
                 }
                 else

@@ -3,28 +3,28 @@
              x:Class="UTS_72220538.Page.CoursePage"
              Title="Courses">
     <StackLayout>
-        <ListView x:Name="CoursesListView"
-                  BackgroundColor="White"
-                  SelectionMode="None">
-            <!-- Disable default selection -->
+        <ListView x:Name="CoursesListView" 
+                  SelectionMode="Single"
+                  ItemSelected="OnCourseSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Horizontal" Padding="10">
-                            <CheckBox IsChecked="{Binding IsSelected}" CheckedChanged="OnCheckboxCheckedChanged" />
-                            <StackLayout Orientation="Vertical">
-                                <Label Text="{Binding Name}" />
-                                <Label Text="{Binding Description}" />
-                            </StackLayout>
+                            <CheckBox IsChecked="{Binding IsSelected}" />
+                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                            <Label Text="{Binding Description}" VerticalOptions="Center" />
+                            <Label Text="{Binding Duration}" VerticalOptions="Center" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button x:Name="AddCourseButton" Text="Add Course" Clicked="OnAddCourse" />
+        <Button x:Name="AddCourseButton" Text="Add Course" Clicked="OnAddCourseClicked" />
         <Button x:Name="RefreshListButton" Text="Refresh List" Clicked="OnRefreshList" />
-        <Button x:Name="DeleteCourseButton" Text="Delete Selected Courses" Clicked="OnDeleteSelectedCourses" IsEnabled="False" />
-        <Button x:Name="UpdateCourseButton" Text="Update Selected Courses" Clicked="OnUpdateSelectedCourses" IsEnabled="False" />
+        <Button x:Name="DeleteSelectedCoursesButton" 
+                Text="Delete Selected Courses" 
+                Clicked="OnDeleteSelectedCourses" />
+        <Button x:Name="UpdateSelectedCourseButton" Text="Update Selected Course" Clicked="OnUpdateSelectedCourses" />
     </StackLayout>
 </ContentPage>

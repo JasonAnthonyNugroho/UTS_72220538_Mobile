@@ -1,22 +1,23 @@
-using UTS_72220538.Models;
-using UTS_72220538.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using UTS_72220538.Models;
+using UTS_72220538.Services;
 
 namespace UTS_72220538.Page
 {
     public partial class CoursePage : ContentPage
     {
         private readonly CourseService _courseService;
-        private ObservableCollection<Course> _courses;
+        private ObservableCollection<CourseWithSelected> _courses;
 
         public CoursePage(CourseService courseService)
         {
             InitializeComponent();
             _courseService = courseService;
-            _courses = new ObservableCollection<Course>();
+            _courses = new ObservableCollection<CourseWithSelected>();
             CoursesListView.ItemsSource = _courses;
 
             LoadCourses(); // Load courses when page is initialized
@@ -28,10 +29,6 @@ namespace UTS_72220538.Page
             await LoadCourses();
         }
 
-        private async void OnAddCourse(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new AddCourse());
-        }
         private async Task LoadCourses()
         {
             try
@@ -40,8 +37,18 @@ namespace UTS_72220538.Page
                 _courses.Clear();
                 foreach (var course in courses)
                 {
-                    course.IsSelected = false; // Initialize IsSelected to false
-                    _courses.Add(course);
+                    // Create a CourseWithSelected instance
+                    var courseWithSelection = new CourseWithSelected
+                    {
+                        CourseId = course.CourseId,
+                        Name = course.Name,
+                        ImageName = course.ImageName,
+                        Duration = course.Duration,
+                        Description = course.Description,
+                        Category = course.Category, // Assigning the associated Category
+                        IsSelected = false // Initialize IsSelected to false
+                    };
+                    _courses.Add(courseWithSelection);
                 }
             }
             catch (Exception ex)
@@ -50,29 +57,31 @@ namespace UTS_72220538.Page
             }
         }
 
-        private void OnCheckboxCheckedChanged(object sender, CheckedChangedEventArgs e)
+
+        private async void OnAddCourseClicked(object sender, EventArgs e)
         {
-            // Find the checkbox that triggered the event
-            var checkbox = sender as CheckBox;
-
-            if (checkbox != null)
-            {
-                // Get the corresponding course
-                var course = checkbox.BindingContext as Course;
-                if (course != null)
-                {
-                    course.IsSelected = checkbox.IsChecked;
-                }
-            }
-
-            // Check if any course is selected to enable buttons
-            var anySelected = _courses.Any(c => c.IsSelected);
-            DeleteCourseButton.IsEnabled = anySelected;
-            UpdateCourseButton.IsEnabled = anySelected;
+            await Navigation.PushAsync(new AddCourse());
         }
+
         private async void OnRefreshList(object sender, EventArgs e)
         {
             await LoadCourses();
+        }
+
+        private void OnCourseSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            var selectedCourse = e.SelectedItem as CourseWithSelected;
+
+            if (selectedCourse != null)
+            {
+                // You can enable the Update and Delete buttons here
+                UpdateSelectedCourseButton.IsEnabled = true; // Example of enabling update button
+            }
+            else
+            {
+                // Handle deselection if necessary
+                UpdateSelectedCourseButton.IsEnabled = false; // Disable if no selection
+            }
         }
 
         private async void OnDeleteSelectedCourses(object sender, EventArgs e)
