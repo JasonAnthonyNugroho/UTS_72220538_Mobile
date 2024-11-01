@@ -20,8 +20,11 @@
         </ListView>
 
         <Button x:Name="AddCategoryButton" Text="Add Category" Clicked="OnAddCategory" />
-        <Button x:Name="RefreshListButton" Text="Refresh List" Clicked="OnRefreshList" />
-        <Button x:Name="DeleteSelectedCategoriesButton" Text="Delete Selected Categories" Clicked="OnDeleteSelectedCategories" />
+        <Button x:Name="RefreshListButton" Text="Refresh List" Clicked="OnLoadCategory" />
+        <Button x:Name="DeleteSelectedCategoriesButton" 
+        Text="Delete Selected Categories" 
+        Clicked="OnDeleteSelectedCategories" />
+
         <Button x:Name="UpdateSelectedCategoryButton" Text="Update Selected Category" Clicked="OnUpdateSelectedCategory" />
     </StackLayout>
 </ContentPage>

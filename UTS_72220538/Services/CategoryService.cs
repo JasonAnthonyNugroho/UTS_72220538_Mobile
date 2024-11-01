@@ -57,11 +57,17 @@ namespace UTS_72220538.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteCategoryAsync(int id)
+        public async Task DeleteCategoryAsync(int categoryId)
         {
-            var response = await _httpClient.DeleteAsync($"api/categories/{id}");
-            response.EnsureSuccessStatusCode();
+            var response = await _httpClient.DeleteAsync($"api/categories/{categoryId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorMsg = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Error deleting category: {response.StatusCode} - {errorMsg}");
+            }
         }
-        
+
+
     }
 }
